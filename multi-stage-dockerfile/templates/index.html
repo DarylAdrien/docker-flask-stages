@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Docker Flask Application Demo</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Docker Flask Application Demo</h1>
+        <p>Learn how to Dockerize a simple Flask web application using a multi-stage Dockerfile.</p>
+    </header>
+
+    <section id="about">
+        <h2>About the Project</h2>
+        <p>This is a demonstration project where we show how to Dockerize a Flask application using a multi-stage Dockerfile to achieve smaller image sizes and better isolation of dependencies.</p>
+    </section>
+
+    <section id="docker-setup">
+        <h2>Docker Setup</h2>
+        <p>We have used a multi-stage Dockerfile to separate the build and runtime environments. This ensures that the final Docker image is small and only contains the necessary dependencies for running the Flask application.</p>
+        <h3>Dockerfile Overview</h3>
+        <pre>
+            <code>
+# Stage 1: Build Stage
+FROM python:3.10-slim as builder
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY ./app/requirements.txt /app/requirements.txt
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY ./app /app
+
+# Stage 2: Runtime Stage
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY --from=builder /app /app
+
+EXPOSE 5000
+
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+            </code>
+        </pre>
+    </section>
+
+    <section id="how-to-run">
+        <h2>How to Run the Application</h2>
+        <p>Follow these steps to build and run the Flask application using Docker:</p>
+        <ol>
+            <li>Clone the repository to your local machine.</li>
+            <li>Build the Docker image:</li>
+            <pre><code>docker build -t flask-docker-demo .</code></pre>
+            <li>Run the Docker container:</li>
+            <pre><code>docker run -d -p 5000:5000 flask-docker-demo</code></pre>
+            <li>Access the application in your browser at <a href="http://localhost:5000" target="_blank">http://localhost:5000</a></li>
+        </ol>
+    </section>
+
+    <section id="benefits">
+        <h2>Benefits of Using Docker</h2>
+        <ul>
+            <li><strong>Isolation:</strong> Docker containers provide a completely isolated environment for your application, ensuring it runs consistently across different systems.</li>
+            <li><strong>Portability:</strong> Docker images can be easily transferred between different systems and cloud platforms.</li>
+            <li><strong>Smaller Image Size:</strong> Multi-stage Dockerfiles reduce the final image size by excluding build dependencies.</li>
+            <li><strong>Faster Deployment:</strong> Docker enables easy setup and faster deployment with pre-configured environments.</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Daryl Adrien | <a href="https://github.com/darylAdrien/docker-stage" target="_blank">GitHub Repository</a></p>
+    </footer>
+
+</body>
+</html>
+

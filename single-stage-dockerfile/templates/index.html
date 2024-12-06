@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Docker Flask Application Demo (Single-Stage)</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Docker Flask Application Demo (Single-Stage)</h1>
+        <p>Learn how to Dockerize a simple Flask web application using a single-stage Dockerfile.</p>
+    </header>
+
+    <section id="about">
+        <h2>About the Project</h2>
+        <p>This project demonstrates how to Dockerize a Flask application using a single-stage Dockerfile. A single-stage Dockerfile directly builds the image without separating the build and runtime environments, making it simpler and faster for small applications.</p>
+    </section>
+
+    <section id="docker-setup">
+        <h2>Docker Setup</h2>
+        <p>We use a single-stage Dockerfile to build the Flask application image. The Flask dependencies are installed in the image, and the application is run in the same container.</p>
+        <h3>Dockerfile Overview</h3>
+        <pre>
+            <code>
+# Single-stage Dockerfile for Flask Application
+
+FROM python:3.10-slim
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the requirements file first for better caching
+COPY requirements.txt /app/
+
+# Install the required Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the application code into the container
+COPY . /app
+
+# Expose the Flask app's port
+EXPOSE 5000
+
+# Define the command to run the Flask app
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+            </code>
+        </pre>
+    </section>
+
+    <section id="how-to-run">
+        <h2>How to Run the Application</h2>
+        <p>Follow these steps to build and run the Flask application using Docker:</p>
+        <ol>
+            <li>Clone the repository to your local machine.</li>
+            <li>Build the Docker image:</li>
+            <pre><code>docker build -t flask-docker-single-stage .</code></pre>
+            <li>Run the Docker container:</li>
+            <pre><code>docker run -d -p 5000:5000 flask-docker-single-stage</code></pre>
+            <li>Access the application in your browser at <a href="http://localhost:5000" target="_blank">http://localhost:5000</a></li>
+        </ol>
+    </section>
+
+    <section id="benefits">
+        <h2>Benefits of Using a Single-Stage Dockerfile</h2>
+        <ul>
+            <li><strong>Simplicity:</strong> Single-stage Dockerfiles are straightforward and simpler to write, making them ideal for small applications and quick setups.</li>
+            <li><strong>Faster Build Process:</strong> Since there is only one stage, the Docker build process can be quicker compared to multi-stage builds that require copying between stages.</li>
+            <li><strong>Smaller Configurations:</strong> There is no need to manage multiple stages and dependencies, making it easier to configure and understand.</li>
+            <li><strong>Ideal for Simple Projects:</strong> For projects with minimal dependencies and a single purpose, a single-stage Dockerfile is often sufficient.</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Daryl Adrien | <a href="https://github.com/darylAdrien/docker-single-multi-stage" target="_blank">GitHub Repository</a></p>
+    </footer>
+
+</body>
+</html>
+
