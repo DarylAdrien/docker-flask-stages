@@ -36,7 +36,6 @@ Visit the Flask app in your browser: Open http://localhost:5000.
 
 
 
-
 ## Multi-Stage Dockerfile
 
 The multi-stage Dockerfile is designed to optimize the image by separating the build environment from the runtime environment. It uses one image to build the application and another to run it. This reduces the size of the final image by excluding development dependencies and build tools.
@@ -69,6 +68,10 @@ Visit the Flask app in your browser: Open http://localhost:5000.
 
 
 
+![Project Images](images/image1.png)
+![Project Images](images/image2.png)
+![Project Images](images/image3.png)
+![Project Images](images/image4.png)
 
 
 
